@@ -81,7 +81,7 @@ The platform incorporates two advanced ensemble machine learning engines located
 ### 1. Install Dependencies
 Clone the repository and install required python modules:
 ```bash
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 ```
 
 ### 2. Configure Environment Variables

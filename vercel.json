@@ -1,9 +1,9 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
     "api/index.py": {
       "maxDuration": 60,
-      "excludeFiles": "{.venv/**,frontend/**,tests/**,lib/**,data/*.csv,data/*.py,data/models/student/**}"
+      "excludeFiles": "{.venv/**,frontend/**,tests/**,lib/**,data/*.csv,data/*.py,data/models/student/**,**/onnxruntime/**,**/sympy/**,**/site-packages/*/tests/**,**/site-packages/pandas/tests/**,**/site-packages/scipy/**/tests/**,**/site-packages/sklearn/**/tests/**}"
     }
-  },
-  "rewrites": [{ "source": "/(.*)", "destination": "/api/index" }]
+  }
 }
