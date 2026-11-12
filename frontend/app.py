@@ -3,6 +3,13 @@ frontend/app.py
 EduGraphAI Streamlit application — main entry with multi-page navigation.
 Run with: streamlit run frontend/app.py
 """
+import sys
+from pathlib import Path
+
+# Make `from frontend...` imports work no matter where Streamlit is launched
+# from (Streamlit Community Cloud only puts this file's folder on sys.path).
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 import streamlit as st
 
 st.set_page_config(
