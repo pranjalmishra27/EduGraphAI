@@ -32,6 +32,8 @@ class Settings(BaseSettings):
     app_env: str = "development"
     log_level: str = "INFO"
     backend_url: str = "http://localhost:8000"
+    # Comma-separated list of origins allowed to call the API (e.g. your Streamlit app URL)
+    allowed_origins: str = "http://localhost:8501,http://127.0.0.1:8501"
     max_upload_size_mb: int = 50
     chunk_size: int = 800
     chunk_overlap: int = 150

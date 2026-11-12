@@ -17,8 +17,9 @@ env/
 # Data / models
 data/chroma_db/
 data/uploads/
-data/models/
+# Trained models in data/models/ are committed so the Vercel deploy can load them
 *.joblib
+!data/models/*.joblib
 
 # IDE
 .vscode/

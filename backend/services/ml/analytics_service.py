@@ -22,8 +22,11 @@ from backend.models.schemas import LearningRecommendation, PerformancePrediction
 warnings.filterwarnings("ignore")
 logger = get_logger(__name__)
 
-MODEL_DIR = Path("./data/models")
-MODEL_DIR.mkdir(parents=True, exist_ok=True)
+MODEL_DIR = Path(os.getenv("MODEL_DIR", "./data/models"))
+try:
+    MODEL_DIR.mkdir(parents=True, exist_ok=True)
+except OSError:
+    pass  # read-only filesystem (e.g. Vercel) -- bundled models are still loadable
 
 
 # ─── Feature Engineering ──────────────────────────────────────────────────────
