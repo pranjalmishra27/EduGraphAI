@@ -3,6 +3,16 @@
 
 EduGraphAI is an AI-powered educational intelligence platform that simplifies and customizes learning. By combining multimodal document parsing, Retrieval-Augmented Generation (RAG), Graph Databases (Neo4j/SQLite), and Ensemble Machine Learning models, the system constructs a dynamic and personalized educational path for students.
 
+## 🌐 Live Demo
+
+| | Link |
+|---|---|
+| **Web App** (Streamlit) | **https://edugraphai0025.streamlit.app** |
+| **Backend API** (FastAPI on Vercel) | https://edugraphai.vercel.app |
+| **API Docs** (Swagger UI) | https://edugraphai.vercel.app/docs |
+
+> **Demo notes:** uploads are limited to **4.5 MB** per file, and uploaded documents are stored temporarily — they may disappear when the serverless backend restarts. The app may take a few seconds to wake up on first visit.
+
 ---
 
 ## 🚀 System Architecture & Flow
@@ -110,3 +120,34 @@ $env:PYTHONPATH="."
 .venv\Scripts\streamlit run frontend/app.py
 ```
 Open **`http://localhost:8501`** in your browser to access the interface.
+
+---
+
+## ☁️ Deployment
+
+The live demo runs as two separately hosted services:
+
+```
+Browser ──► Streamlit Community Cloud ──► Vercel (FastAPI) ──► Gemini API
+            frontend/app.py               api/index.py
+```
+
+### Backend → Vercel
+* Entry point: [`api/index.py`](api/index.py) (imports the FastAPI `app` from `backend/main.py`); config in [`vercel.json`](vercel.json).
+* Vercel installs the root [`requirements.txt`](requirements.txt), which contains **backend dependencies only**. Local-only extras (Streamlit, tests, sentence-transformers, …) live in [`requirements-dev.txt`](requirements-dev.txt).
+* Vercel's filesystem is read-only, so on startup the bundled SQLite databases are copied to `/tmp` and used from there (changes are not persistent).
+* Required environment variables (Project → Settings → Environment Variables):
+
+  | Variable | Value |
+  |---|---|
+  | `GEMINI_API_KEY` | your Gemini API key |
+  | `GEMINI_MODEL` | `gemini-2.5-flash` |
+  | `VERCEL_SUPPORT_LARGE_FUNCTIONS` | `1` (the bundle exceeds the standard 500 MB function limit) |
+  | `DATABASE_URL`, `NEO4J_URI`, `NEO4J_USER`, `NEO4J_PASSWORD` | *optional* — hosted Postgres / Neo4j for persistent storage |
+
+* Deploy with `npx vercel deploy --prod`, or connect the GitHub repo in the Vercel dashboard.
+
+### Frontend → Streamlit Community Cloud
+* Repository `pranjalmishra27/EduGraphAI`, branch `main`, main file `frontend/app.py`.
+* Dependencies come from [`frontend/requirements.txt`](frontend/requirements.txt).
+* The frontend calls the backend at the `BACKEND_URL` environment variable or Streamlit secret; on Streamlit Cloud it defaults to `https://edugraphai.vercel.app`.
