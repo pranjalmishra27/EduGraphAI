@@ -1,6 +1,5 @@
 # Used by Streamlit Community Cloud (it picks up requirements.txt next to app.py)
 streamlit==1.35.0
-streamlit-extras==0.4.3
 plotly==5.22.0
 pyvis==0.3.2
 pandas==2.2.2

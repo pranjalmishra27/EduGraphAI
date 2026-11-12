@@ -2,6 +2,7 @@
 # Usage: pip install -r requirements-dev.txt
 -r requirements.txt
 -r frontend/requirements.txt
+streamlit-extras==0.4.3
 
 uvicorn[standard]==0.29.0
 
