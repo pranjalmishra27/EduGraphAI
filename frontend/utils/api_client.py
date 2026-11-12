@@ -8,7 +8,24 @@ import os
 import httpx
 from typing import Any
 
-BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
+PRODUCTION_BACKEND_URL = "https://edugraphai.vercel.app"
+
+
+def _resolve_backend_url() -> str:
+    """BACKEND_URL env var > Streamlit secret > deployed default > localhost."""
+    url = os.getenv("BACKEND_URL")
+    if not url:
+        try:
+            import streamlit as st
+            url = st.secrets.get("BACKEND_URL")
+        except Exception:
+            url = None  # no secrets.toml configured
+    if not url and os.path.abspath(__file__).startswith("/mount/src/"):
+        url = PRODUCTION_BACKEND_URL  # running on Streamlit Community Cloud
+    return (url or "http://localhost:8000").rstrip("/")
+
+
+BACKEND_URL = _resolve_backend_url()
 BASE = f"{BACKEND_URL}/api/v1"
 TIMEOUT = 120.0   # Gemini calls can be slow
 
